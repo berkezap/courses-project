@@ -1,8 +1,8 @@
-import './App.css';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import Courses from './Courses';
-import Loading from './Loading';
+import "./App.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Courses from "./Courses";
+import Loading from "./Loading";
 
 function App() {
   const [courses, setCourses] = useState([]);
@@ -16,14 +16,12 @@ function App() {
   const fetchCourses = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:3000/courses');
+      const response = await axios.get("http://localhost:3000/courses");
       setCourses(response.data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
-
-
   };
 
   useEffect(() => {
@@ -34,7 +32,23 @@ function App() {
       {loading ? (
         <Loading />
       ) : (
-        <Courses courses={courses} removeCourse={deleteCourse} />
+        <>
+          {courses.length === 0 ? (
+            <div className="RefreshDiv">
+              <h2>Kursların hepsi silindi.</h2>
+              <button
+                className="cardDeleteBtn"
+                onClick={() => {
+                  fetchCourses();
+                }}
+              >
+                Yenile
+              </button>
+            </div>
+          ) : (
+            <Courses courses={courses} removeCourse={deleteCourse} />
+          )}
+        </>
       )}
     </div>
   );
